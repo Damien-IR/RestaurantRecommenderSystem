@@ -1,0 +1,311 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Find your Place</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .map_wrap {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+
+        .list_area {
+            width: 400px;
+            height: 100%;
+            float: right;
+            overflow: auto;
+        }
+
+        .list_item_inner {
+            display: block;
+            width: 380px;
+            height: auto;
+            clear: both;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            margin: 0;
+            z-index: 10;
+        }
+
+        .list_item_inner:hover {
+            background: #d2d6f5;
+        }
+
+        .thumb {
+            float: left;
+            position: relative;
+            display: block;
+            padding-top: 11px;
+        }
+
+        .thumb_area {
+            display: block;
+            margin-top: 2px;
+            float: left;
+            margin-right: 16px;
+        }
+
+        .infos {
+            max-width: 220px;
+            display: block;
+            overflow: hidden;
+            float: left;
+            position: relative;
+            text-overflow: ellipsis;
+            margin-left: 8px;
+        }
+
+        .title_char {
+            font-weight: bold;
+        }
+
+        .title_area {
+            text-decoration: none;
+            text-overflow-ellipsis: true;
+        }
+
+        .title_area:hover {
+            text-decoration: underline;
+        }
+
+        .title_name {
+            font-size: 16px;
+        }
+
+        .roadAddr, .commonAddr {
+            width: 100%;
+            overflow: hidden;
+            display: block;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 12px;
+        }
+
+        .category {
+            font-size: 12px;
+            color: darkgray;
+        }
+
+        .blogReviewCount, .bookingReviewCount {
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .btnDiv {
+            text-align: center;
+            position: relative;
+            size: auto;
+        }
+
+        .button {
+            padding: 3px 10px 3px 10px;
+        }
+
+        .panel-collapse {
+            display: block;
+            width: 100%;
+            height: auto;
+            float: right
+        }
+
+        .panel-body {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .carousel {
+            position: relative;
+            display: block;
+        }
+
+        .carousel-inner img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .desc {
+            text-align: center;
+            position: relative;
+            size: auto;
+            color: grey;
+        }
+
+        .listHead {
+            width: 100%;
+            height: 40px;
+            background: lightblue;
+        }
+
+        .menuHead, .operHead {
+            display: block;
+            width: 100%;
+            height: auto;
+            text-align: center;
+        }
+
+        .table {
+            width: 100%;
+            height: auto;
+            padding-left: 50px;
+        }
+
+        .tableHead {
+            display: block;
+            width: 100%;
+            height: auto;
+            font-size: 16px;
+        }
+
+        .menuHead {
+            width: 60%;
+            float: left;
+            text-align: center;
+        }
+
+        .priceHead {
+            width: 40%;
+            float: right;
+            text-align: center;
+        }
+
+        .menuTr {
+            display: block;
+            width: 100%;
+            height: auto
+        }
+
+        .menu {
+            width: 60%;
+            text-align: center;
+            float: left;
+            height: 65px;
+            padding: 25px;
+        }
+
+        .key {
+            width: 40%;
+            text-align: center;
+            float: right;
+            height: 65px;
+            padding: 25px;
+        }
+
+        .operationList {
+            width: 100%;
+            height: auto;
+            padding-left: 75px;
+        }
+
+        .operHead {
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .operation {
+            font-size: 16px;
+            float: bottom;
+            width: 100%;
+        }
+
+        #map {
+            width: calc(100% - 400px);
+            height: 100%;
+            float: left;
+            overflow: hidden;
+        }
+
+        #list_head {
+            float: top;
+            width: 100%;
+            height: 25px;
+        }
+
+        #list_body {
+            float: bottom;
+            width: 100%;
+            height: calc(100% - 50px);
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        #list_place {
+            padding-inline-start: 0px;
+        }
+
+        #list_place li {
+            padding-right: 0px;
+            float: left
+        }
+
+        #refersh_list_button {
+            position: absolute;
+            top: 5px;
+            right: 125px;
+            overflow: hidden;
+            width: 200px;
+            height: 35px;
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+{% if id %}
+    <div id="id" style="display: none"> {{ id }}</div>
+{% endif %}
+{% if email %}
+    <div id="email" style="display: none"> {{ email }}</div>
+{% endif %}
+<div class="map_wrap">
+    <div id="map">
+        <button type="button" class="btn btn-primary" id="refersh_list_button" onclick="refreshList()">
+            목록 새로고침
+        </button>
+    </div>
+    <div class="list_area">
+        <div id="list_body">
+            <ul id="list_place">
+            </ul>
+        </div>
+        <div class="btnDiv">
+            <button class="btn btn-info" id="btnPrev" onclick="prevButtonPressed()">
+                <
+            </button>
+            <span id="pageNum">
+                        1
+                    </span>
+            <button class="btn btn-info" id="btnNext" onclick="nextButtonPressed()">
+                >
+            </button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=be92075425b5a1a3a1400d9081c5c1a2&libraries=services,clusterer,drawing"></script>
+<script type="text/javascript" src="{% static 'places/js/script.js' %}"></script>
+</body>
+</html>
